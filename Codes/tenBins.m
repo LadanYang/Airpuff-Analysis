@@ -1,0 +1,162 @@
+load("megarat.mat");
+% %see what different laps look like
+ 
+% LtoR=megarat{1,2}.LtoRlaps;
+% RtoL=megarat{1,2}.RtoLlaps;
+% Ulap=megarat{1,2}.Uturnlaps;
+% 
+% for l=1:length(LtoR)
+%     s=round(LtoR(l,1)*39.0625);
+%     e=round(LtoR(l,2)*39.0625);
+%     figure
+%     plot(xdata(s:e,1));
+%     title("LtoR");
+% end
+% 
+% for l=1:length(RtoL)
+%     s=round(RtoL(l,1)*39.0625);
+%     e=round(RtoL(l,2)*39.0625);
+%     figure
+%     plot(xdata(s:e,1));
+%     title("RtoL"+l);
+% end
+% 
+% for l=1:length(Ulap)
+%     s=round(Ulap(l,1)*39.0625);
+%     e=round(Ulap(l,2)*39.0625);
+%     figure
+%     plot(xdata(s:e,1));
+%     title("Ulap"+l);
+% end
+
+
+
+% dir=megarat{1,1}.airpuffdir+"laps";
+% lap=megarat{1,1}.(dir);
+
+for m=1:length(megarat)
+
+    lap=vertcat(megarat{1,m}.LtoRlaps,megarat{1,m}.RtoLlaps);
+    cells=megarat{1,m}.spikes;
+    xdata=megarat{1,m}.videodata;
+
+    for l=1:length(lap)
+        bin1=0;
+        bin2=0;
+        bin3=0;
+        bin4=0;
+        bin5=0;
+        bin6=0;
+        bin7=0;
+        bin8=0;
+        bin9=0;
+        bin10=0;
+        
+        lapstart=lap(l,1);
+        lapend=lap(l,2);
+        laplength=lapend-lapstart;
+       
+        for c=1:length(cells)
+            neuron=cells{1,c};
+            lapcell=find(neuron(:,1)>=lapstart & neuron(:,1) <= lapend);
+
+    %         if xdata(round(cell(lapcell,1)),1)>=200 & xdata(round(cell(lapcell,1)),1) < 230
+    %             bin1=bin1+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=230 & xdata(round(cell(lapcell,1)),1) < 260
+    %             bin2=bin2+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=260 & xdata(round(cell(lapcell,1)),1) < 290
+    %             bin3=bin3+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=290 & xdata(round(cell(lapcell,1)),1) < 320
+    %             bin4=bin4+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=320 & xdata(round(cell(lapcell,1)),1) < 350
+    %             bin5=bin5+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=350 & xdata(round(cell(lapcell,1)),1) < 380
+    %             bin6=bin6+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=380 & xdata(round(cell(lapcell,1)),1) < 410
+    %             bin7=bin7+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=410 & xdata(round(cell(lapcell,1)),1) < 440
+    %             bin8=bin8+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=440 & xdata(round(cell(lapcell,1)),1) < 470
+    %             bin9=bin9+1;
+    %         elseif xdata(round(cell(lapcell,1)),1)>=470 & xdata(round(cell(lapcell,1)),1) < 500
+    %             bin10=bin10+1;
+    %         end
+            binstart=round(lapstart*39.0625);
+            binend=round(lapend*39.0625);
+            bin=xdata(binstart:binend,1);
+            a=neuron(lapcell,1);
+            b=round(a*39.0625);
+            bin1=length(find(xdata(b,1)>=200 & xdata(b,1) < 230));
+            bin1time=length(find(bin(:,1)>=200 & bin(:,1)<230))/39.0625    
+            bin2=length(find(xdata(b,1)>=230 & xdata(b,1) < 260));
+            bin2time=length(find(bin(:,1)>=230 & bin(:,1)<260))/39.0625;     
+            bin3=length(find(xdata(b,1)>=260 & xdata(b,1) < 290));
+            bin3time=length(find(bin(:,1)>=260 & bin(:,1)<290))/39.0625;     
+            bin4=length(find(xdata(b,1)>=290 & xdata(b,1) < 320));
+            bin4time=length(find(bin(:,1)>=290 & bin(:,1)<320))/39.0625;     
+            bin5=length(find(xdata(b,1)>=320 & xdata(b,1) < 350));
+            bin5time=length(find(bin(:,1)>=320 & bin(:,1)<350))/39.0625;     
+            bin6=length(find(xdata(b,1)>=350 & xdata(b,1) < 380));
+            bin6time=length(find(bin(:,1)>=350 & bin(:,1)<380))/39.0625;    
+            bin7=length(find(xdata(b,1)>=380 & xdata(b,1) < 410));
+            bin7time=length(find(bin(:,1)>=380 & bin(:,1)<410))/39.0625;     
+            bin8=length(find(xdata(b,1)>=410 & xdata(b,1) < 440));
+            bin8time=length(find(bin(:,1)>=410 & bin(:,1)<440))/39.0625;     
+            bin9=length(find(xdata(b,1)>=440 & xdata(b,1) < 470));
+            bin9time=length(find(bin(:,1)>=440 & bin(:,1)<470))/39.0625;     
+            bin10=length(find(xdata(b,1)>=470 & xdata(b,1) < 500));
+            bin10time=length(find(bin(:,1)>=470 & bin(:,1)<500))/39.0625;     
+           
+            disp('part1check')
+            megarat{1,m}.tenBin{1,c}(l,1)=bin1;
+            megarat{1,m}.tenBin{1,c}(l,2)=bin2;
+            megarat{1,m}.tenBin{1,c}(l,3)=bin3;
+            megarat{1,m}.tenBin{1,c}(l,4)=bin4;
+            megarat{1,m}.tenBin{1,c}(l,5)=bin5;
+            megarat{1,m}.tenBin{1,c}(l,6)=bin6;
+            megarat{1,m}.tenBin{1,c}(l,7)=bin7;
+            megarat{1,m}.tenBin{1,c}(l,8)=bin8;
+            megarat{1,m}.tenBin{1,c}(l,9)=bin9;
+            megarat{1,m}.tenBin{1,c}(l,10)=bin10;
+            disp('check2')
+            %get the firing rate of each bin
+            megarat{1,m}.tenBinFR{1,c}(l,1)=bin1/bin1time;
+            megarat{1,m}.tenBinFR{1,c}(l,2)=bin2/bin2time;
+            megarat{1,m}.tenBinFR{1,c}(l,3)=bin3/bin3time;
+            megarat{1,m}.tenBinFR{1,c}(l,4)=bin4/bin4time;
+            megarat{1,m}.tenBinFR{1,c}(l,5)=bin5/bin5time;
+            megarat{1,m}.tenBinFR{1,c}(l,6)=bin6/bin6time;
+            megarat{1,m}.tenBinFR{1,c}(l,7)=bin7/bin7time;
+            megarat{1,m}.tenBinFR{1,c}(l,8)=bin8/bin8time;
+            megarat{1,m}.tenBinFR{1,c}(l,9)=bin9/bin9time;
+            megarat{1,m}.tenBinFR{1,c}(l,10)=bin10/bin10time;
+            bin1=0;
+            bin2=0;
+            bin3=0;
+            bin4=0;
+            bin5=0;
+            bin6=0;
+            bin7=0;
+            bin8=0;
+            bin9=0;
+            bin10=0;
+        end
+    end
+end
+
+% %draw out xdata for each session
+% for m=1:length(megarat)
+%     xda=megarat{1,m}.videodata;
+%     %xda(xda(:,1)<0)=[];
+%     x=find(xda(:,1)<0);
+%     xda(x,:)=[];
+%     figure
+%     plot(xda(:,1));
+%     title("Session"+m);
+% end
+
+%find out the airpuff bin
+for i=1:length(megarat)
+    nbin=(megarat{1,i}.airpuffloc-100)/50;
+    megarat{1,i}.airpuffbin=floor(nbin)+1;
+end

@@ -1,0 +1,70 @@
+
+session = megarat{1, 6}.tenBinFR;
+data=session{1,1};
+%horizontally concatenate each cell's data
+for i=2:length(session)
+    data=horzcat(data,session{1,i});
+end
+data(24:45,:)=[];
+%add the response variable (airpuff or not bin) in the last row
+
+for n=1:length(data)
+    if mod(n,6)==0
+        data(24,n)=1;
+    else
+        data(24,n)=0;
+    end
+end
+
+data=data';
+% Step 2: Split the data into training and testing sets
+rng(1); % Set the random seed for reproducibility
+cvp = cvpartition(size(data, 1), 'Holdout', 0.1); % 90% for training, 10% for testing
+dataTrain = data(cvp.training, :);
+dataTest = data(cvp.test, :);
+
+% Step 3: Prepare the predictor and response variables
+predictors = dataTrain(:, 1:end-1); % Assuming the last column contains the response variable
+response = dataTrain(:, end);
+
+% Step 4: Train the random forest model
+numTrees = 100; % Number of decision trees in the random forest
+model = TreeBagger(numTrees, predictors, response, 'Method', 'classification'); % or 'regression' for regression problems
+
+% Step 5: Make predictions on the test set
+testPredictors = dataTest(:, 1:end-1);
+predictedLabels = predict(model, testPredictors);
+
+% Step 6: Evaluate the model
+actualLabels = dataTest(:, end);
+correct=0;
+actual={actualLabels};
+predictLabels=str2double(predictedLabels);
+%predictLabels(a,1)==actualLabels(a,1);
+%isequal(predict(a,1),actualLabels(a,1));
+predictLabels=int32(predictLabels);
+actualLabels=int32(actualLabels);
+% for a=length(actualLabels)
+%     if isequal(predictLabels(a,1),actualLabels(a,1));
+%         correct=correct+1;
+%     end
+% end
+% accuracy = correct/length(actualLabels);
+%accuracy = sum(strcmp(predictedLabels, actualLabels)) / numel(actualLabels);
+
+accuracy = sum(predictLabels == actualLabels) / numel(actualLabels);
+fprintf('Accuracy: %.2f%%\n', accuracy * 100);
+
+TP=0;
+TN=0;
+FP=0;
+FN=0;
+P=find(predictLabels(:,1)==1)
+TP=length(find(actualLabels(P)==1))
+TN= sum(predictLabels == actualLabels) - TP
+FP=length(P)-TP
+ActualP=find(actualLabels(:,1)==1);
+FN=length(find(predictLabels(ActualP)==0));
+precision = TP/(TP+FP)
+recall=TP/(TP+FN)
+F1=2*((precision*recall)/(precision+recall))
