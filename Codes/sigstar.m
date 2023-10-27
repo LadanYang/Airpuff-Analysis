@@ -236,6 +236,7 @@ function H=makeSignificanceBar(x,y,p)
         stars='***'; 
     elseif p<=1E-2
         stars='**';
+    %0.05/5=0.01
     elseif p<=0.05
         stars='*';
     elseif isnan(p)
